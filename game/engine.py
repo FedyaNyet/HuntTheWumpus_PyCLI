@@ -1,4 +1,4 @@
-from game.players import Computer, User
+from game.players import Player
 from board import Board
 
 class Engine:
@@ -15,5 +15,9 @@ class Engine:
 		self._player = Player()
 
 	def play(self):
-		while self._player.isAlive():
+		while self._player.isAlive() and not self._player.didWin():
 			self._player.do_next_move()
+		if self._player.didWin():
+			print "You Escaped!!!"
+			return
+		print "Game Over"

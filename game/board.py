@@ -3,7 +3,6 @@ class Tile:
 	isSmelly = False
 	isShiny = False
 	isBreezy = False
-	isPlayer = False
 	isPit = False
 	isWumpas = False
 

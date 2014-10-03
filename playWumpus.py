@@ -7,7 +7,7 @@ class HuntTheWumpusApp(CommandLineApp):
 	name = "HuntTheWumpus"
 
 	def setup(self):
-		super(TicTacToeApp,self).setup()
+		super(HuntTheWumpusApp,self).setup()
 		self.add_param("-f", "--file", help="Define the game file to play against.", 
 			default="game.txt", action="store_true")
 		
