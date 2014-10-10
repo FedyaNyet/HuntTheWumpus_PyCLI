@@ -13,6 +13,7 @@ class Engine:
 		"""
 		self._board = Board(filename)
 		self._player = Player()
+		print self._board
 
 	def play(self):
 		while self._player.isAlive() and not self._player.didWin():
