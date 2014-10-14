@@ -1,4 +1,5 @@
 from math import sqrt
+from game import DIRECTION_UP, DIRECTION_DOWN, DIRECTION_LEFT, DIRECTION_RIGHT
 
 class Tile:
 
@@ -10,7 +11,9 @@ class Tile:
 	isWumpas = False
 
 	coordinates = (None, None) #(row, column)
-	wasVisted = False
+
+	def __init__(self,row,col):
+		self.coordinates = (row,col)
 
 	def set_property(self,character):
 		if character == "E":
@@ -47,6 +50,7 @@ class Board:
 
 	_height = 0
 	_width = 0
+	_entrance_tile = None
 	_board = [[None]]
 
 	def __init__(self, filename=None):
@@ -68,6 +72,9 @@ class Board:
 	def __getitem__(self, row):
 		return self._board[row]
 
+	def append(self, row):
+		self._board.append(row)
+
 	def parse_file(self, filename):
 		newBoard = []
 		myFile = open( filename, "r" )
@@ -76,12 +83,10 @@ class Board:
 				dimensions = line.split("=")[1].strip().split(",")
 				self._width = int(dimensions[0])
 				self._height = int(dimensions[1])
-				for row in xrange(self._height):
+				for row in range(self._height):
 					newBoard.append([])
-					for col in xrange(self._width):
-						tile = Tile()
-						tile.coordinates = (row, col)
-						newBoard[row].append(tile)
+					for col in range(self._width):
+						newBoard[row].append(Tile(row, col))
 				continue
 			lineInfo = line.rstrip().split(",")
 			coordinates = lineInfo[0:2]
@@ -91,12 +96,23 @@ class Board:
 				col = int(coordinates[1])
 				tile = newBoard[row][col]
 				tile.set_property(tileProp)
+				if tile.isEntrance:
+					self._entrance_tile = tile
 		myFile.close()
 		return newBoard
+
+
+	def get_tile_in_direction_of_coordinates(self, coordinates, direction):
+		if direction == DIRECTION_UP:
+			return self[coordinates[0]+1][coordinates[1]]
+		elif direction == DIRECTION_DOWN:
+			return self[coordinates[0]-1][coordinates[1]]
+		elif direction == DIRECTION_LEFT:
+			return self[coordinates[0]][coordinates[1]-1]
+		elif direction == DIRECTION_RIGHT:
+			return self[coordinates[0]][coordinates[1]+1]
 
 	@classmethod
 	def get_distance(cls, tile1, tile2):
 		return abs(tile1.coordinates[0] - tile2.coordinates[0]) + abs(tile1.coordinates[1] - tile2.coordinates[1])
-	
-
 
