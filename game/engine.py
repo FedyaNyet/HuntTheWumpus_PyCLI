@@ -30,8 +30,8 @@ class Engine:
 			next_tile = self._board.get_tile_in_direction_of_coordinates(self._player._coordinates, next_move[1])
 			if ACTION_SHOOT == next_action:
 				self._player._points -= 10
-				if next_tile.isWumpas:
-					self._player._points += 1000
+				# if next_tile.isWumpas:
+					# self._player._points += 1000
 				next_tile.isWumpas = False
 			elif ACTION_MOVE == next_action:
 				self._player._coordinates = next_tile.coordinates
@@ -40,9 +40,7 @@ class Engine:
 			print "Agent Points: "+str(self._player._points)
 		if self.agent_is_winner():
 			self._player._points += 1000
-			print "The Agent Escaped!!!"
-			print "Points Total: "+str(self._player._points)
+			print "The Agent Escaped!!! Points Total: "+str(self._player._points)
 			return
-		print "Game Over"
 		self._player._points -= 1000
-		print "Points Total: "+str(self._player._points)
+		print "Game Over: Points Total: "+str(self._player._points)

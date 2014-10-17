@@ -103,14 +103,17 @@ class Board:
 
 
 	def get_tile_in_direction_of_coordinates(self, coordinates, direction):
-		if direction == DIRECTION_UP:
-			return self[coordinates[0]+1][coordinates[1]]
-		elif direction == DIRECTION_DOWN:
-			return self[coordinates[0]-1][coordinates[1]]
-		elif direction == DIRECTION_LEFT:
-			return self[coordinates[0]][coordinates[1]-1]
-		elif direction == DIRECTION_RIGHT:
-			return self[coordinates[0]][coordinates[1]+1]
+		try:
+			if direction == DIRECTION_UP:
+				return self[coordinates[0]+1][coordinates[1]]
+			elif direction == DIRECTION_DOWN:
+				return self[coordinates[0]-1][coordinates[1]]
+			elif direction == DIRECTION_LEFT:
+				return self[coordinates[0]][coordinates[1]-1]
+			elif direction == DIRECTION_RIGHT:
+				return self[coordinates[0]][coordinates[1]+1]
+		except e:
+			return None
 
 	@classmethod
 	def get_distance(cls, tile1, tile2):
