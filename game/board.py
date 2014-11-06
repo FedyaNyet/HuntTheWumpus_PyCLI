@@ -76,13 +76,16 @@ class Board:
 		self._board.append(row)
 
 	def parse_file(self, filename):
+		#print "parse_file: "+ filename
 		newBoard = []
 		myFile = open( filename, "r" )
 		for i,line in enumerate(myFile):
 			if not i:
 				dimensions = line.split("=")[1].strip().split(",")
 				self._width = int(dimensions[0])
+				#print "Board _width: %d" % self._width
 				self._height = int(dimensions[1])
+				#print "Board _height: %d" % self._height
 				for row in range(self._height):
 					newBoard.append([])
 					for col in range(self._width):
@@ -101,18 +104,23 @@ class Board:
 		myFile.close()
 		return newBoard
 
-
 	def get_tile_in_direction_of_coordinates(self, coordinates, direction):
+		tile = None
 		try:
 			if direction == DIRECTION_UP:
-				return self[coordinates[0]+1][coordinates[1]]
+				if coordinates[0] > 0:
+					tile = self[coordinates[0]-1][coordinates[1]]
 			elif direction == DIRECTION_DOWN:
-				return self[coordinates[0]-1][coordinates[1]]
+				if coordinates[0] < (self._height-1):
+					tile = self[coordinates[0]+1][coordinates[1]]
 			elif direction == DIRECTION_LEFT:
-				return self[coordinates[0]][coordinates[1]-1]
+				if coordinates[1] > 0:
+					tile = self[coordinates[0]][coordinates[1]-1]
 			elif direction == DIRECTION_RIGHT:
-				return self[coordinates[0]][coordinates[1]+1]
-		except e:
+				if coordinates[1] < (self._width-1):
+					tile = self[coordinates[0]][coordinates[1]+1]
+			return tile
+		except:
 			return None
 
 	@classmethod
