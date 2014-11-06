@@ -1,6 +1,7 @@
 from game.players import Player
 from game import ACTION_SHOOT, ACTION_MOVE
 from board import Board
+import pdb
 
 class Engine:
 
@@ -28,6 +29,7 @@ class Engine:
 			next_move = self._player.get_next_move()
 			next_action = next_move[0]
 			next_tile = self._board.get_tile_in_direction_of_coordinates(self._player._coordinates, next_move[1])
+			pdb.set_trace()
 			
 			if ACTION_SHOOT == next_action:
 				self._player._points -= 10

@@ -1,5 +1,6 @@
 from board import Board, Tile
 from game import ACTION_SHOOT, ACTION_MOVE, DIRECTION_UP, DIRECTION_DOWN, DIRECTION_LEFT, DIRECTION_RIGHT
+import pdb
 
 class AgentTile(Tile):
 
@@ -31,13 +32,16 @@ class Player:
 		self._board._height = board_height
 		self._board._width = board_width
 		print "[__init__] board_height: %d" % board_height
+
+		self._board._board = [[0 for i in range(board_height)] for j in range(board_width)]
+
 		for row in range(board_height):
-			self._board.append([])
 			for col in range(board_width):
 				print "[__init__] append to row: %d col: %d" % (row, col)
 				tile = AgentTile(row, col)
 				print "[__init__] tile created is visited: ", tile.isVisited
-				self._board[row].append(tile)
+				self._board._board[row][col] = tile
+				#pdb.set_trace()
 
 
 	def get_next_action(self):
@@ -50,10 +54,11 @@ class Player:
 		unvistited_tiles = []
 		for row in range(self._board._height):
 			for col in range(self._board._width):
-				tile = self._board[row][col]
-				print "[get_direction_of_closest_new_square] tile coordinates: ", tile.coordinates
-				print "[get_direction_of_closest_new_square] tile is visited: %r " % self._board[row][col].isVisited
-				if tile.isVisited == False:
+				#print "[get_direction_of_closest_new_square] checking row: %d col: %d" % (row, col)
+				tile = self._board._board[row][col]
+				#print "[get_direction_of_closest_new_square] tile coordinates: ", tile.coordinates
+				#print "[get_direction_of_closest_new_square] tile is visited: %r " % self._board._board[row][col].isVisited
+				if tile.is_clear_afik and not tile.isVisited:
 					#print "[get_direction_of_closest_new_square] add unvistied tile with coordinates: ", tile.coordinates
 					unvistited_tiles.append(tile)
 
@@ -85,6 +90,8 @@ class Player:
 				horizontal_direction = DIRECTION_RIGHT
 			elif min_distance_tile.coordinates[1] < self._coordinates[1]:
 				horizontal_direction = DIRECTION_LEFT
+
+			#pdb.set_trace()
 
 			if not vertical_direction:
 				direction_to_go = horizontal_direction
@@ -134,7 +141,7 @@ class Player:
 			# follow bread crumb back to start
 			theMove = self.get_reverse_move( self._bread_crumbs.pop() )
 		else :
-			myTile = self._board[self._coordinates[0]][self._coordinates[1]]
+			myTile = self._board._board[self._coordinates[0]][self._coordinates[1]]
 			print "[get_next_move] Tile I'm on is at row: %d column: %d" % (self._coordinates[0], self._coordinates[1])
 			shouldReverseDirection = False
 			if myTile:
@@ -181,7 +188,7 @@ class Player:
 		for row in range(self._board._height):
 			for col in range(self._board._width):
 				#print "[update_knowledge_base] at row: %d column: %d" % (row, col)
-				agentTile = self._board[row][col]
+				agentTile = self._board._board[row][col]
 				#print "[update_knowledge_base] tile isBreezy: %r isSmelly: %r" % (agentTile.isBreezy, agentTile.isSmelly)
 				if agentTile.isBreezy:
 					for direction in directions:
@@ -214,9 +221,9 @@ class Player:
 			return
 
 		print "[reveal_tile] I moved to tile at row: %d column: %d" % (tile.coordinates[0], tile.coordinates[1])
-		agentTile = self._board[tile.coordinates[0]][tile.coordinates[1]]
-		if not agentTile:
-			agentTile = AgentTile(tile.coordinates[0], tile.coordinates[1])
+		agentTile = self._board._board[tile.coordinates[0]][tile.coordinates[1]]
+		#pdb.set_trace()
+
 		print "[reveal_tile] the tile where I moved: ", agentTile
 		agentTile.isVisited = True
 		agentTile.isShiny = tile.isShiny
@@ -226,8 +233,6 @@ class Player:
 		agentTile.isWumpas = tile.isWumpas
 		agentTile.isEntrance = tile.isEntrance
 
-		self._board[tile.coordinates[0]][tile.coordinates[1]] = agentTile
-		print self._board[tile.coordinates[0]][tile.coordinates[1]].isVisited
 		if tile.isShiny:
 			self._has_gold = True
 		if tile.isPit or tile.isWumpas:

@@ -1,5 +1,6 @@
 from math import sqrt
 from game import DIRECTION_UP, DIRECTION_DOWN, DIRECTION_LEFT, DIRECTION_RIGHT
+import pdb
 
 class Tile:
 
@@ -14,6 +15,8 @@ class Tile:
 
 	def __init__(self,row,col):
 		self.coordinates = (row,col)
+		#print "[board __init__] row: %d col: %d" % (row, col)
+		#pdb.set_trace()
 
 	def set_property(self,character):
 		if character == "E":
@@ -45,6 +48,11 @@ class Tile:
 			retString[5] = 'P'
 		return "".join(retString)
 
+	def is_clear_afik(self):
+		is_clear = True
+		if self.isBreezy or self.isSmelly or self.isPit or self.isWumpas:
+			is_clear = False
+		return is_clear
 
 class Board:
 
@@ -106,11 +114,12 @@ class Board:
 
 	def get_tile_in_direction_of_coordinates(self, coordinates, direction):
 		tile = None
+		#pdb.set_trace()
 		try:
-			if direction == DIRECTION_UP:
+			if direction == DIRECTION_DOWN:
 				if coordinates[0] > 0:
 					tile = self[coordinates[0]-1][coordinates[1]]
-			elif direction == DIRECTION_DOWN:
+			elif direction == DIRECTION_UP:
 				if coordinates[0] < (self._height-1):
 					tile = self[coordinates[0]+1][coordinates[1]]
 			elif direction == DIRECTION_LEFT:
