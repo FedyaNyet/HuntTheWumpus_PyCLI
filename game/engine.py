@@ -1,6 +1,7 @@
 from game.players import Player
 from game import ACTION_SHOOT, ACTION_MOVE
 from board import Board
+import pdb
 
 class Engine:
 
@@ -10,7 +11,7 @@ class Engine:
 
 	def __init__(self, filename):
 		"""
-		Play Hunt The Wumpus. 
+		Play Hunt The Wumpus.
 		"""
 		self._board = Board(filename)
 		self._player = Player(board_height=self._board._height, board_width=self._board._width, coordinates=self._board._entrance_tile.coordinates)
@@ -28,6 +29,8 @@ class Engine:
 			next_move = self._player.get_next_move()
 			next_action = next_move[0]
 			next_tile = self._board.get_tile_in_direction_of_coordinates(self._player._coordinates, next_move[1])
+			pdb.set_trace()
+			
 			if ACTION_SHOOT == next_action:
 				self._player._points -= 10
 				# if next_tile.isWumpas:
